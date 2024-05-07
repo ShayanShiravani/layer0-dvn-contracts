@@ -63,7 +63,7 @@ contract MuonDVN is ILayerZeroDVN, AccessControl {
     ) external payable override returns (uint256 _fee) {
         require(supportedDstChain[_param.dstEid], "Unsupported chain");
 
-        // TODO: check if it's required to validate msg.sender
+        require(msg.sender == address(layerZeroEndpointV2), "Invalid sender");
 
         uint256 jobId = ++lastJobId;
         Job storage newJob = jobs[jobId];
@@ -91,7 +91,7 @@ contract MuonDVN is ILayerZeroDVN, AccessControl {
     }
 
     function verify(
-        uint32 _srcEid,
+        uint32 _dstEid,
         address _receiver,
         bytes memory _packetHeader,
         bytes32 _payloadHash,
@@ -103,7 +103,7 @@ contract MuonDVN is ILayerZeroDVN, AccessControl {
             abi.encodePacked(
                 muonAppId,
                 _reqId,
-                _srcEid,
+                _dstEid,
                 _receiver,
                 _packetHeader,
                 _payloadHash,
@@ -114,7 +114,7 @@ contract MuonDVN is ILayerZeroDVN, AccessControl {
         _verifyMuonSig(_reqId, hash, _signature);
 
         _verify(
-            _srcEid,
+            _dstEid,
             _receiver,
             _packetHeader,
             _payloadHash,
@@ -151,7 +151,7 @@ contract MuonDVN is ILayerZeroDVN, AccessControl {
 
     /// @dev for dvn to verify the payload
     function _verify(
-        uint32 _srcEid,
+        uint32 _dstEid,
         address _receiver,
         bytes memory _packetHeader,
         bytes32 _payloadHash,
@@ -161,7 +161,7 @@ contract MuonDVN is ILayerZeroDVN, AccessControl {
 
         (receiverLib, ) = layerZeroEndpointV2.getReceiveLibrary(
             _receiver,
-            _srcEid
+            _dstEid
         );
 
         IReceiveUlnE2(receiverLib).verify(
