@@ -6,17 +6,13 @@ function sleep(milliseconds: number) {
 
 async function main() {
 
-    const args = [
-    "93503201847067459816865778983521324688116667814772937141130154736249866362126",
-    {
-      x: "0x4182885822fe798509811091b5b6300299deae3d98a771cc179c2ffd11dabebb",
-      parity: 1,
-    },
-    "0x9d34AC454DF11724bE4e11F0E9c9C9bd68bC8173",
-    "0x6edce65403992e310a62460808c4b910d972f10f"
+  const args = [
+    "0x6EDCE65403992e310A62460808c4b910D972f10f",
+    "0xb57490CDAABEDb450df33EfCdd93079A24ac5Ce5",
+    "0x9bA9F04936e20c918Fb0F4733D909AE7fe61a92C"
   ]
 
-  const contract = await ethers.deployContract("MuonDVN", args);
+  const contract = await ethers.deployContract("ERC721MinterOApp", args);
 
   await contract.waitForDeployment();
   const contractAddress = await contract.getAddress();
@@ -29,7 +25,7 @@ async function main() {
 
   await run("verify:verify", {
     address: contractAddress,
-    constructorArguments: args,
+    constructorArguments: args
   });
 }
 

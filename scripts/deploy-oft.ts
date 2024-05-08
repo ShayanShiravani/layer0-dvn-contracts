@@ -13,16 +13,17 @@ async function main() {
 
   const contract = await ethers.deployContract("ExampleOFT", args);
 
-  await contract.deployed();
+  await contract.waitForDeployment();
+  const contractAddress = await contract.getAddress();
 
   console.log(
-    `contract deployed to ${contract.address}`
+    `contract deployed to ${contractAddress}`
   );
   
   await sleep(20000);
 
   await run("verify:verify", {
-    address: contract.address,
+    address: contractAddress,
     constructorArguments: args,
     // contract: "contracts/muon/MuonClient.sol:MuonClient"
   });
