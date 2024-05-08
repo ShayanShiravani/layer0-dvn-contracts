@@ -1,6 +1,7 @@
 import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import { HttpNetworkUserConfig } from "hardhat/types";
+import '@openzeppelin/hardhat-upgrades';
 
 require('dotenv').config();
 const Web3 = require('web3');
@@ -104,7 +105,7 @@ const config: HardhatUserConfig = {
     ...networks
   },
   solidity: {
-    version: "0.8.22",
+    version: "0.8.20",
     settings: {
       optimizer: {
         enabled: true,
